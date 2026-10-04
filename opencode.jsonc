@@ -1,0 +1,108 @@
+// OpenCode project config for the benchmark. Models: point provider.local at your OpenAI-compatible endpoint.
+// MCP servers (see README, "Agent toolchain"): cvm runs TDDAB plans; lsai = semantic navigation of THIS repo
+// (install once: curl -fsSL https://github.com/0ics-srls/Zerox.Lsai.Public/releases/latest/download/install.sh | bash);
+// xmp4 = third-party library intelligence (free endpoint); chrome-devtools = DOM checks (headless: remove "--headless"
+// to watch the browser; Chrome flags must go through --chrome-arg); primeng = component docs.
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "local/qwen3.8-27b-ninfer",
+  "small_model": "local/qwen3.8-27b-ninfer",
+  "compaction": {
+    "auto": true
+  },
+  "provider": {
+    "local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local (llama-swap)",
+      "options": {
+        "baseURL": "http://localhost:8080/v1",
+        "apiKey": "not-needed"
+      },
+      "models": {
+        "qwen3.8-27b-ninfer": {
+          "name": "Qwen3.8-27B on NInfer (V100 + 4090 tensor parallel)",
+          "limit": {
+            "context": 262144,
+            "output": 65536
+          },
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "xhigh": {
+              "reasoningEffort": "xhigh"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "none": {
+              "reasoningEffort": "none"
+            }
+          }
+        }
+      }
+    }
+  },
+  "mcp": {
+    "cvm": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "cvm-server@latest"
+      ],
+      "environment": {
+        "CVM_STORAGE_TYPE": "file",
+        "CVM_DATA_DIR": ".cvm",
+        "CVM_LOG_LEVEL": "info",
+        "CVM_SANDBOX_PATHS": "."
+      },
+      "enabled": true
+    },
+    "lsai": {
+      "type": "local",
+      "command": [
+        "{env:HOME}/.lsai/run",
+        "--stdio"
+      ],
+      "enabled": true
+    },
+    "xmp4": {
+      "type": "remote",
+      "url": "https://mcp.example4.ai/mcp",
+      "enabled": true
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--headless",
+        "--chrome-arg=--no-sandbox",
+        "--chrome-arg=--disable-setuid-sandbox"
+      ],
+      "enabled": true
+    },
+    "primeng": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@primeng/mcp"
+      ],
+      "enabled": true
+    }
+  },
+  "permission": {}
+}
