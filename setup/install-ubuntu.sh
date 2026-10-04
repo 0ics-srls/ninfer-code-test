@@ -60,6 +60,8 @@ if [ -d "$TSLS" ] && ! node -e "process.exit(require('$TSLS/node_modules/typescr
   npm install --prefix "$TSLS" --silent typescript@5
 fi
 
+[ -n "${TOOLCHAIN_ONLY:-}" ] && { echo; echo "toolchain installed (TOOLCHAIN_ONLY)"; exit 0; }
+
 step "project dependencies"
 cd "$(dirname "$0")/.."
 npm ci --prefix web --silent

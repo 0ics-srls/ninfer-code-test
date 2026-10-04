@@ -53,6 +53,19 @@ assumes all of them are active**: without them it still runs, but worse.
 
 ### Setting it up
 
+**Option 0 — in a container (nothing installed on your system; Docker on Linux, macOS or Windows):**
+
+```bash
+docker compose -f docker/compose.yaml up -d --build                                   # toolchain image, ~10 min once
+docker compose -f docker/compose.yaml exec ninfer-code-test bash setup/install-ubuntu.sh       # project deps + baseline + MCP status
+docker compose -f docker/compose.yaml exec ninfer-code-test bash setup/check-agent-tools.sh    # a model calls every tool
+docker compose -f docker/compose.yaml exec -it ninfer-code-test opencode              # the agent
+```
+
+The repository is mounted into the container, so the agent's commits land in your clone. The container reaches the model
+on the host at `host.docker.internal:8080` (llama-swap); point it elsewhere with
+`LLM_BASE_URL=http://<host>:<port>/v1 docker compose -f docker/compose.yaml up -d`. Chrome runs headless inside it. On Windows and macOS the repository is a mounted host folder: LSAI's first indexing takes a few minutes longer than on Linux (if the tool check reports /, run it again).
+
 **Option A — one script (Ubuntu 24.04 or WSL2):**
 
 ```bash
@@ -173,6 +186,7 @@ The same plan on Qwen3.8-27B FP8 under vLLM (1Cat fork, V100 + 4090): 6/6, revie
 | `opencode.jsonc` | model provider, reasoning variants, MCP servers (CVM, LSAI, xmp4, chrome-devtools, PrimeNG) |
 | `setup/install-ubuntu.sh` | installs the whole toolchain on Ubuntu 24.04 / WSL2 and checks it |
 | `setup/check-agent-tools.sh` | asks a model to call every MCP tool the plan needs |
+| `docker/` | `Dockerfile` + `compose.yaml`: the same toolchain in an isolated container |
 
 ## Notes on the workflow
 

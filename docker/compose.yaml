@@ -1,0 +1,34 @@
+# Run the benchmark in a container: nothing is installed on your system.
+#
+#   docker compose -f docker/compose.yaml up -d --build                                # build the toolchain image (~10 min once)
+#   docker compose -f docker/compose.yaml exec ninfer-code-test bash setup/install-ubuntu.sh    # project deps + checks
+#   docker compose -f docker/compose.yaml exec ninfer-code-test bash setup/check-agent-tools.sh
+#   docker compose -f docker/compose.yaml exec -it ninfer-code-test opencode           # the agent
+#
+# The model: provider "local" in opencode.jsonc is redirected to LLM_BASE_URL (default: llama-swap on the host, port 8080).
+#   LLM_BASE_URL=http://my-gpu-box:8080/v1 docker compose -f docker/compose.yaml up -d
+# Explicit project name: without it Docker would use the directory name ("docker"), shared with unrelated projects.
+name: ninfer-code-test
+
+services:
+  ninfer-code-test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        UID: ${UID:-1000}
+    image: ninfer-code-test/agent
+    container_name: ninfer-code-test
+    working_dir: /home/dev/ninfer-code-test
+    volumes:
+      - ..:/home/dev/ninfer-code-test
+      - opencode-data:/home/dev/.local/share/opencode
+    environment:
+      OPENCODE_CONFIG_CONTENT: '{"provider":{"local":{"options":{"baseURL":"${LLM_BASE_URL:-http://host.docker.internal:8080/v1}"}}}}'
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    shm_size: 1gb
+    init: true
+
+volumes:
+  opencode-data:
