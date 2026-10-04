@@ -1,0 +1,38 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+logs/
+
+# Frontend
+web/node_modules/
+web/dist/
+web/.angular/
+
+# IDE
+.vs/
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CVM
+.cvm/
+
+# LSAI
+.lsai/
+.cvm
+
+# Playwright
+web/test-results/
+web/playwright-report/

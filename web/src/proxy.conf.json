@@ -1,0 +1,3 @@
+{
+  "^/(api|openapi|health|version)": { "target": "http://localhost:5000", "secure": false }
+}

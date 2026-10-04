@@ -1,0 +1,14 @@
+<p-dialog [(visible)]="visible" [header]="header()" [modal]="true" [style]="{ width: '480px', maxWidth: '90vw' }">
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="flex flex-col gap-3 p-3">
+      <input pInputText formControlName="title" placeholder="Title" class="w-full" />
+      <p-select [options]="statusOptions" formControlName="status" placeholder="Status" styleClass="w-full" appendTo="body" />
+      <p-date-picker formControlName="dueDate" dataType="string" dateFormat="yy-mm-dd" view="date"
+                     appendTo="body" [readonlyInput]="true" [showClear]="true" placeholder="Due date" styleClass="w-full" />
+      <div class="flex gap-2 justify-end">
+        <p-button type="button" label="Cancel" severity="secondary" (onClick)="visible.set(false)" />
+        <p-button type="submit" label="Save" [disabled]="title.invalid" />
+      </div>
+    </div>
+  </form>
+</p-dialog>

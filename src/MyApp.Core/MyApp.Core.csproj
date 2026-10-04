@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="MyApp.Core.Tests" />
+    <InternalsVisibleTo Include="MyApp.Server" />
+    <InternalsVisibleTo Include="MyApp.Infrastructure" />
+  </ItemGroup>
+
+</Project>

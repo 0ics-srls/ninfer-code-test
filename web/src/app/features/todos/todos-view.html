@@ -1,0 +1,75 @@
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+  <p-card header="Stats" styleClass="md:col-span-1">
+    <div class="flex flex-col gap-3">
+      <div class="flex justify-between">
+        <span class="font-semibold">Total</span>
+        <span>{{ statsTotal() }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-semibold">Completed</span>
+        <span>{{ statsCompleted() }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-semibold">Pending</span>
+        <span>{{ statsPending() }}</span>
+      </div>
+    </div>
+  </p-card>
+
+  <p-card header="Todos" styleClass="md:col-span-3">
+    <div class="mb-3">
+      <p-button label="New Todo" icon="pi pi-plus" (onClick)="openCreate()" />
+    </div>
+    <div class="flex gap-2 items-center mb-3 flex-wrap">
+      <input pInputText type="text" placeholder="Search title..." [value]="searchTerm()"
+             (input)="onSearchChange($any($event).target.value)" class="w-56" />
+      <p-select [options]="filterStatusOptions" [(ngModel)]="filterStatus"
+                (onChange)="onStatusFilterChange($event)" styleClass="w-40" appendTo="body" />
+      <p-date-picker [(ngModel)]="filterRange" selectionMode="range" [readonlyInput]="true"
+                     placeholder="Created range" (onSelect)="onRangeSelect()" (onClearClick)="onRangeClear()"
+                     appendTo="body" styleClass="w-56" />
+      <p-button icon="pi pi-filter-slash" [rounded]="true" [text]="true" (onClick)="clearFilters()" [pTooltip]="'Clear'" />
+    </div>
+    <p-table [value]="todos()" [lazy]="true" (onLazyLoad)="loadTodos($event)"
+             [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+             [totalRecords]="totalRecords()" sortMode="single">
+      <ng-template #header>
+        <tr>
+          <th>ID</th>
+          <th pSortableColumn="title">
+            <div class="flex items-center gap-2">Title <p-sortIcon field="title" /></div>
+          </th>
+          <th pSortableColumn="status">
+            <div class="flex items-center gap-2">Status <p-sortIcon field="status" /></div>
+          </th>
+          <th pSortableColumn="createdAt">
+            <div class="flex items-center gap-2">Created At <p-sortIcon field="createdAt" /></div>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-todo>
+        <tr>
+          <td>{{ todo.id }}</td>
+          <td>{{ todo.title }}</td>
+          <td>{{ todo.status }}</td>
+          <td>{{ todo.createdAt }}</td>
+          <td>
+            <div class="flex gap-1 items-center">
+              <p-button [icon]="statusIconForNext(todo)" [rounded]="true" [text]="true"
+                        severity="secondary"
+                        [pTooltip]="nextStatusOf(todo)" tooltipPosition="top"
+                        (onClick)="cycleStatus(todo)" />
+              <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEdit(todo)" />
+              <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [text]="true" (onClick)="confirmDelete(todo)" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
+
+<app-todo-dialog [(visible)]="dialogVisible" [editing]="editing()" (saved)="onSaved($event)" />
+
+<p-confirmDialog />

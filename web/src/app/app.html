@@ -1,0 +1,17 @@
+<main class="main">
+  <div class="flex items-center justify-between p-4">
+    <div class="flex items-center gap-4">
+      <h1>{{ title() }}</h1>
+      <nav class="flex gap-2">
+        <a pButton routerLink="/todos" routerLinkActive="active-nav" [rounded]="true" [text]="true">Table</a>
+        <a pButton routerLink="/week" routerLinkActive="active-nav" [rounded]="true" [text]="true">Week</a>
+      </nav>
+    </div>
+    <p-button [icon]="isDark() ? 'pi pi-sun' : 'pi pi-moon'"
+              (onClick)="toggleTheme()"
+              [rounded]="true" [text]="true"
+              pTooltip="Toggle dark mode" />
+  </div>
+  <router-outlet />
+</main>
+@if (isDev) { <review-panel api-url="http://localhost:3200/api"></review-panel> }

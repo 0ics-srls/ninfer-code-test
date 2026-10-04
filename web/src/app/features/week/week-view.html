@@ -1,0 +1,38 @@
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 p-4">
+  @for (col of week(); track col.date ?? 'undated') {
+    <div class="week-col rounded-lg border border-slate-200 dark:border-slate-700 p-2 flex flex-col gap-2"
+         pDroppable="todo"
+         (onDrop)="onDrop(col)"
+         [class.today]="col.isToday"
+         [attr.data-date]="col.date ?? ''">
+      <div class="week-col-header font-semibold text-center">
+        {{ col.label }}
+      </div>
+      @if (col.todos.length === 0) {
+        <div class="text-sm text-slate-400 text-center py-2">—</div>
+      } @else {
+        @for (todo of col.todos; track todo.id) {
+          <div class="week-card rounded-md border border-slate-200 dark:border-slate-700 p-2 flex flex-col gap-1"
+               pDraggable="todo"
+               (onDragStart)="dragged = todo"
+               data-test="week-card">
+            <span class="text-sm font-medium truncate">{{ todo.title }}</span>
+            <p-tag [value]="todo.status" [severity]="statusSeverity[todo.status]" size="small" />
+            <div class="flex gap-1 items-center justify-end">
+              <p-button [icon]="statusIcons[nextStatusOf(todo)]" [rounded]="true" [text]="true"
+                        severity="secondary" size="small"
+                        [pTooltip]="nextStatusOf(todo)"
+                        (onClick)="cycleStatus(todo)" />
+              <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" size="small" (onClick)="openEdit(todo)" />
+              <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [text]="true" size="small" (onClick)="confirmDelete(todo)" />
+            </div>
+          </div>
+        }
+      }
+    </div>
+  }
+</div>
+
+<app-todo-dialog [(visible)]="dialogVisible" [editing]="editing()" (saved)="onSaved($event)" />
+
+<p-confirmDialog />

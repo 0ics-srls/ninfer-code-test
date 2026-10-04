@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
+  "input": "http://localhost:5000/openapi/v1.json",
+  "output": "src/app/generated",
+  "defaultTag": "MyApp"
+}
