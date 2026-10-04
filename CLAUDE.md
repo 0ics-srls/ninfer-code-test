@@ -35,7 +35,9 @@
 - Gen API: `cd web && npm run gen-api` (backend must be running on :5000)
 
 ## Code Navigation
-- PrimeNG docs: primeng MCP (see opencode.json)
+- Local: lsai (compiler-grade symbol search)
+- External libs: xmp4 (SCIP-backed for third-party libraries)
+- PrimeNG docs: primeng MCP
 
 ## Conventions
 - Enums: string JSON serialization (JsonStringEnumConverter)

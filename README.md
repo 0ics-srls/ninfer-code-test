@@ -96,10 +96,20 @@ The same plan on Qwen3.8-27B FP8 under vLLM (1Cat fork, V100 + 4090): 6/6, revie
 | `src/`, `tests/` | ASP.NET Core 10 Web API, EF Core SQLite, xUnit v3 |
 | `web/` | Angular 21 + PrimeNG 21, vitest, Playwright e2e |
 | `tasks/07-required-due-date/plan.md` | the benchmark plan |
-| `.opencode/commands/` | `j-cvm-exec-plan` (runs a plan), `j-cvm-check-plan` (validates one), `j-review-plan` |
+| `.opencode/` | the **j-\*** agent workflow used for all our runs: 25 `j-*` commands (`/j-cvm-exec-plan` runs a plan, `/j-cvm-check-plan` validates one, `/j-review-plan`, `/j-develop`, `/j-debug`, …), their mind-sets (TDDAB planner, step planner, per-language senior guides and project foundations, debug protocols), 4 sub-agents (build, test, memory-bank reader and writer) |
+| `AGENTS.md` | the workflow's agent guide: memory bank first, then the task |
+| `CLAUDE.md` | project facts: stack, app surface, version locks, conventions |
+| `memory-bank/` | the agent's memory of the project (MBEL v5, grammar in `memory-bank/README.md`), state = before plan 07 |
+| `j-settings.md` | project settings read by the `j-*` commands (folders, build/test commands, ports) |
 | `opencode.json` | model provider, reasoning variants, MCP servers (CVM, chrome-devtools, PrimeNG docs) |
-| `AGENTS.md`, `CLAUDE.md` | rules and project facts for the agent |
-| `memory-bank/` | the agent's notes about the project, state = before plan 07 |
+
+## Notes on the workflow
+
+- Some `j-*` commands mention optional code-navigation MCP servers (lsai, vs-mcp, xmp4). They are not needed: when they
+  are not configured the commands fall back to grep/glob, which is how this benchmark is meant to run.
+- Known stall: at the end of each block the CVM executor asks for a JSON summary, and some models print it in the chat
+  instead of passing it to `cvm_submitTask`; the run then waits. Answer "Submit it with cvm_submitTask, then continue
+  with cvm_getTask" and it resumes. (Our runs counted these nudges; run 4 needed none.)
 
 ## The app
 

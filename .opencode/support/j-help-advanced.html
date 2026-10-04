@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior Workflow — Visual Guide</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+        h1 { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; color: #fff; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 2rem; font-size: 1.1rem; }
+        h2 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #333;
+            color: #64ffda;
+        }
+        .diagram-container {
+            background: #16213e;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .mermaid { display: flex; justify-content: center; }
+        .quick-ref {
+            background: #0f3460;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            font-family: monospace;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .quick-ref strong { color: #64ffda; }
+        footer {
+            text-align: center;
+            color: #555;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Junior Workflow — Visual Guide</h1>
+    <p class="subtitle">How j-* commands work together</p>
+
+    <h2>1. Feature Development Flow</h2>
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph TD
+    A["You have an idea"] --> B["j-new-feature"]
+    B --> C["Tell me what you need\n(I listen, you talk)"]
+    C --> D["Say 'done'"]
+    D --> E["I analyze the code\nand search for\nexisting solutions"]
+    E --> F["I propose a solution\nYou approve or adjust"]
+    F --> G["I create a\nstep-by-step plan"]
+    G --> H{"Plan OK?"}
+    H -->|"Change it"| F
+    H -->|"Looks good!"| I["j-develop"]
+    I --> J["I build it\nstep by step"]
+    J --> K["All done, tests pass"]
+    K --> L["j-close"]
+    L --> M["Merged and deployed!"]
+
+    style A fill:#4CAF50,color:#fff
+    style M fill:#4CAF50,color:#fff
+    style I fill:#2196F3,color:#fff
+    style L fill:#FF9800,color:#fff
+        </pre>
+    </div>
+
+    <h2>2. Bug Fix Flow</h2>
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph TD
+    A["Something is broken!"] --> B["j-bug"]
+    B --> C["Tell me:\n- What should happen?\n- What happens instead?\n- Where?"]
+    C --> D["Say 'done'"]
+    D --> E["I investigate\nthe problem"]
+    E --> F["I explain what's wrong\nand propose a fix"]
+    F --> G{"Fix OK?"}
+    G -->|"Try different"| E
+    G -->|"Go ahead"| H["I fix it and\nrun tests"]
+    H --> I{"Tests pass?"}
+    I -->|"No"| E
+    I -->|"Yes"| J["j-close"]
+    J --> K["Fix merged\nand deployed!"]
+
+    style A fill:#f44336,color:#fff
+    style K fill:#4CAF50,color:#fff
+    style H fill:#2196F3,color:#fff
+    style J fill:#FF9800,color:#fff
+        </pre>
+    </div>
+
+    <h2>3. All Commands Overview</h2>
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph LR
+    subgraph SETUP
+        S1["j-setup\nConfigure project"]
+        S2["j-new-project\nCreate from scratch"]
+    end
+
+    subgraph START
+        A1["j-new-feature\nNew functionality"]
+        A2["j-bug\nFix something broken"]
+        A3["j-poc\nExperiment safely"]
+        A4["j-continue\nResume work"]
+    end
+
+    subgraph WORK
+        W1["j-develop\nBuild the plan"]
+        W2["j-debug\nInvestigate problems"]
+        W3["j-review-plan\nCheck plan quality"]
+        W4["j-status\nSee progress"]
+        W5["j-save\nSave and leave"]
+    end
+
+    subgraph TEST
+        T1["j-test-browser\nQuick browser test"]
+        T2["j-e2e\nFull test suite"]
+    end
+
+    subgraph FINISH
+        F1["j-close\nMerge and deploy"]
+        F2["j-deploy\nDeploy only"]
+    end
+
+    S1 --> A1
+    S2 --> S1
+    A1 --> W1
+    A2 --> F1
+    A3 -->|"Idea works!"| A1
+    A4 --> W1
+    W1 --> F1
+    W5 -->|"Next session"| A4
+
+    style S1 fill:#9C27B0,color:#fff
+    style S2 fill:#9C27B0,color:#fff
+    style A1 fill:#4CAF50,color:#fff
+    style A2 fill:#f44336,color:#fff
+    style W1 fill:#2196F3,color:#fff
+    style F1 fill:#FF9800,color:#fff
+        </pre>
+    </div>
+
+    <h2>4. Session Lifecycle</h2>
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph TD
+    A["Start session"] --> B{"First time\non this project?"}
+    B -->|"Yes"| C["j-setup"]
+    B -->|"No"| D{"Continuing\nprevious work?"}
+    C --> D
+    D -->|"Yes"| E["j-continue\nResumes where\nyou left off"]
+    D -->|"No"| F{"What to do?"}
+    E --> G["Keep working..."]
+    F -->|"New feature"| H["j-new-feature"]
+    F -->|"Fix bug"| I["j-bug"]
+    F -->|"Experiment"| J["j-poc"]
+    H --> G
+    I --> G
+    J --> G
+    G --> K{"Done for today?"}
+    K -->|"Yes"| L["j-save\nEverything saved!"]
+    K -->|"Feature complete"| M["j-close\nMerge and deploy"]
+    K -->|"Not yet"| G
+
+    style A fill:#4CAF50,color:#fff
+    style L fill:#9C27B0,color:#fff
+    style M fill:#FF9800,color:#fff
+        </pre>
+    </div>
+
+    <h2>Quick Reference</h2>
+    <div class="quick-ref">
+        <strong>j-help</strong>           &rarr; See all commands (text list)<br>
+        <strong>j-help-advanced</strong>   &rarr; See these diagrams<br>
+        <strong>j-status</strong>          &rarr; Where am I right now?<br>
+        <strong>j-save</strong>            &rarr; Save everything before leaving<br>
+        <strong>j-continue</strong>        &rarr; Pick up where you left off
+    </div>
+
+    <footer>ai-agent Junior Workflow — generated by j-help-advanced</footer>
+
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+</body>
+</html>
